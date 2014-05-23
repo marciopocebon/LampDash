@@ -14,9 +14,12 @@ class Handler:
         self.aboutWin.show_all()
         
     def deleteMainWindow(self, *args):
-        Gtk.main_quit()
+        Gtk.main_quit(*args)
 
-class MainWindow:
+    def setHostsText(self, *args):
+        print(args)
+
+class NanoDash:
     """
     Gtk Builder and main top level window
     Sets up event handling and shows windows
@@ -28,6 +31,26 @@ class MainWindow:
         self.win = self.builder.get_object("MainWindow")
         self.win.show_all()
 
+        # Fill the hosts TextView with /etc/hosts file
+        self.hostsTextView = self.builder.get_object("textview1")
+        self.hostsBuff = self.hostsTextView.get_buffer()
+        with open("/etc/hosts", "r") as hostsFile:
+            self.hostsBuff.set_text(hostsFile.read())
+
+        # Fill the vhosts TreeView with a list of sites-available
+        # List of files, on/off toggle, edit button, delete, clone
+        
+        # Set the httpd status text
+        # Running/Off
+
+    # def save etchosts
+
+    # def restart httpd
+
+    def run(self):
+        Gtk.main()
+
+
 if __name__ == "__main__":
-    mainWin = MainWindow()
-    Gtk.main()
+    dash = NanoDash()
+    dash.run()
