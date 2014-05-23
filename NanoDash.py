@@ -2,6 +2,7 @@ from gi.repository import Gtk
 
 glade_file = "NanoDash.glade"
 
+
 class Handler:
     """
     Callback handler functions for the Gtk signals
@@ -16,9 +17,6 @@ class Handler:
     def deleteMainWindow(self, *args):
         Gtk.main_quit(*args)
 
-    def setHostsText(self, *args):
-        print(args)
-
 class NanoDash:
     """
     Gtk Builder and main top level window
@@ -28,17 +26,26 @@ class NanoDash:
         self.builder = Gtk.Builder()
         self.builder.add_from_file(glade_file)
         self.builder.connect_signals(Handler(self.builder))
-        self.win = self.builder.get_object("MainWindow")
-        self.win.show_all()
+        self.mainWin = self.builder.get_object("MainWindow")
+        self.mainWin.show_all()
 
         # Fill the hosts TextView with /etc/hosts file
-        self.hostsTextView = self.builder.get_object("textview1")
-        self.hostsBuff = self.hostsTextView.get_buffer()
+        self.ehostsTextView = self.builder.get_object("ehostsText")
+        self.ehostsBuff = self.ehostsTextView.get_buffer()
         with open("/etc/hosts", "r") as hostsFile:
-            self.hostsBuff.set_text(hostsFile.read())
+            self.ehostsBuff.set_text(hostsFile.read())
 
-        # Fill the vhosts TreeView with a list of sites-available
-        # List of files, on/off toggle, edit button, delete, clone
+        # Fill the hosts TextView with /etc/hosts file
+        self.ehostsTextView = self.builder.get_object("ehostsText")
+        self.ehostsBuff = self.ehostsTextView.get_buffer()
+        with open("/etc/hosts", "r") as hostsFile:
+            self.ehostsBuff.set_text(hostsFile.read())
+
+        # Fill the vhosts
+        self.vhostsTextView = self.builder.get_object("vhostsText")
+        self.vhostsBuff = self.vhostsTextView.get_buffer()
+        with open("/etc/httpd/conf/httpd.conf", "r") as hostsFile:
+            self.vhostsBuff.set_text(hostsFile.read())
         
         # Set the httpd status text
         # Running/Off
