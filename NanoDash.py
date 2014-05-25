@@ -35,12 +35,6 @@ class NanoDash:
         with open("/etc/hosts", "r") as hostsFile:
             self.ehostsBuff.set_text(hostsFile.read())
 
-        # Fill the hosts TextView with /etc/hosts file
-        self.ehostsTextView = self.builder.get_object("ehostsText")
-        self.ehostsBuff = self.ehostsTextView.get_buffer()
-        with open("/etc/hosts", "r") as hostsFile:
-            self.ehostsBuff.set_text(hostsFile.read())
-
         # Fill the vhosts
         self.vhostsTextView = self.builder.get_object("vhostsText")
         self.vhostsBuff = self.vhostsTextView.get_buffer()
