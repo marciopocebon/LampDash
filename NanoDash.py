@@ -34,12 +34,20 @@ class NanoDash:
         self.ehostsBuff = self.ehostsTextView.get_buffer()
         with open("/etc/hosts", "r") as hostsFile:
             self.ehostsBuff.set_text(hostsFile.read())
+        # Set ehost scrolled window to expand on resize
+        self.ehostsScrollWin = self.builder.get_object("ehostsScrollWin")
+        self.ehostsScrollWin.set_hexpand(True)
+        self.ehostsScrollWin.set_vexpand(True)
 
         # Fill the vhosts
         self.vhostsTextView = self.builder.get_object("vhostsText")
         self.vhostsBuff = self.vhostsTextView.get_buffer()
         with open("/etc/httpd/conf/httpd.conf", "r") as hostsFile:
             self.vhostsBuff.set_text(hostsFile.read())
+        # Set vhost scrolled window to expand on resize
+        self.vhostsScrollWin = self.builder.get_object("vhostsScrollWin")
+        self.vhostsScrollWin.set_hexpand(True)
+        self.vhostsScrollWin.set_vexpand(True)
         
         # Set the httpd status text
         # Running/Off
