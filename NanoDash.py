@@ -1,21 +1,12 @@
+#!/usr/bin/python2
+
 from gi.repository import Gtk
+import os
 
-glade_file = "NanoDash.glade"
-
-
-class Handler:
-    """
-    Callback handler functions for the Gtk signals
-    """
-    def __init__(self, GtkBuilder):
-        self.builder = GtkBuilder
-
-    def openAboutWin(self, *args):
-        self.aboutWin = self.builder.get_object("aboutdialog1")
-        self.aboutWin.show_all()
-        
-    def deleteMainWindow(self, *args):
-        Gtk.main_quit(*args)
+glade_file = "dash.glade"
+vhosts_file = '/etc/httpd/conf/extra/httpd-vhosts.conf'
+ehosts_file = '/etc/hosts'
+apache_restart_command = 'systemctl restart httpd'
 
 class NanoDash:
     """
@@ -25,14 +16,23 @@ class NanoDash:
     def __init__(self):
         self.builder = Gtk.Builder()
         self.builder.add_from_file(glade_file)
-        self.builder.connect_signals(Handler(self.builder))
+
+        handlers = {
+            "deleteMainWindow": self.deleteMainWindow,
+            "openAboutWin": self.openAboutWin,
+            "ehostsSave": self.ehostsSave,
+            "vhostsSave": self.vhostsSave,
+            "restartHttpd": self.restartHttpd,
+        }
+        self.builder.connect_signals(handlers)
+
         self.mainWin = self.builder.get_object("MainWindow")
         self.mainWin.show_all()
 
         # Fill the hosts TextView with /etc/hosts file
         self.ehostsTextView = self.builder.get_object("ehostsText")
         self.ehostsBuff = self.ehostsTextView.get_buffer()
-        with open("/etc/hosts", "r") as hostsFile:
+        with open(ehosts_file, "r") as hostsFile:
             self.ehostsBuff.set_text(hostsFile.read())
         # Set ehost scrolled window to expand on resize
         self.ehostsScrollWin = self.builder.get_object("ehostsScrollWin")
@@ -42,23 +42,42 @@ class NanoDash:
         # Fill the vhosts
         self.vhostsTextView = self.builder.get_object("vhostsText")
         self.vhostsBuff = self.vhostsTextView.get_buffer()
-        with open("/etc/httpd/conf/httpd.conf", "r") as hostsFile:
+        with open(vhosts_file, "r") as hostsFile:
             self.vhostsBuff.set_text(hostsFile.read())
         # Set vhost scrolled window to expand on resize
         self.vhostsScrollWin = self.builder.get_object("vhostsScrollWin")
         self.vhostsScrollWin.set_hexpand(True)
         self.vhostsScrollWin.set_vexpand(True)
-        
-        # Set the httpd status text
-        # Running/Off
 
-    # def save etchosts
-
-    # def restart httpd
+    def restartHttpd(self, *args):
+        print("restarting apache")
+        print(os.system(apache_restart_command))
 
     def run(self):
         Gtk.main()
 
+    def openAboutWin(self, *args):
+        self.aboutWin = self.builder.get_object("aboutdialog1")
+        self.aboutWin.show_all()
+
+    def deleteMainWindow(self, *args):
+        Gtk.main_quit(*args)
+
+    def ehostsSave(self, *args):
+        ehostsText = self.ehostsBuff.get_text(self.ehostsBuff.get_start_iter(),
+                                       self.ehostsBuff.get_end_iter(),
+                                       False)
+        f = open(ehosts_file, 'w+')
+        f.write(ehostsText)
+        f.close()
+
+    def vhostsSave(self, *args):
+        vhostsText = self.vhostsBuff.get_text(self.vhostsBuff.get_start_iter(),
+                                       self.vhostsBuff.get_end_iter(),
+                                       False)
+        f = open(vhosts_file, 'w+')
+        f.write(vhostsText)
+        f.close()
 
 if __name__ == "__main__":
     dash = NanoDash()
