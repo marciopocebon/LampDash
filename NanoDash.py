@@ -3,10 +3,12 @@
 from gi.repository import Gtk
 import os
 
+# Settings
 glade_file = "dash.glade"
 vhosts_file = '/etc/httpd/conf/extra/httpd-vhosts.conf'
 ehosts_file = '/etc/hosts'
 apache_restart_command = 'systemctl restart httpd'
+
 
 class NanoDash:
     """
