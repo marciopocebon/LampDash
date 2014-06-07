@@ -4,7 +4,7 @@ from gi.repository import Gtk
 import os
 
 # Settings
-glade_file = "dash.glade"
+glade_file = os.path.dirname(os.path.realpath(__file__)) + "/dash.glade"
 vhosts_file = '/etc/httpd/conf/extra/httpd-vhosts.conf'
 ehosts_file = '/etc/hosts'
 apache_restart_command = 'systemctl restart httpd'
