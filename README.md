@@ -1,6 +1,6 @@
-# NanoDash
+# NanoLampDash
 
-GTK+3 Dashboard for easy system administration
+GUI interface for managing Apache virtual hosts and hostnames. 
 
 ## Description
 
@@ -10,4 +10,4 @@ Operations require root privileges so do not use unless you know what you
 are doing! This software comes with no warranty and is provided as-is.
 
 Currently only a single dashboard interface with access to /etc/hosts
-and the httpd vhosts file. Also an httpd restart button for convenience.
+and the httpd vhosts file. It also includes a button to restart httpd.
