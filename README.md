@@ -1,4 +1,4 @@
-# NanoLampDash
+# LampDash
 
 GUI interface for managing Apache virtual hosts and hostnames. 
 
